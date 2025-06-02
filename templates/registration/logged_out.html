@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Sesión Cerrada{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6 col-lg-4 text-center">
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">¡Has cerrado sesión correctamente!</h4>
+                <p>Esperamos verte de nuevo pronto.</p>
+            </div>
+            <p>
+                <a href="{% url 'login' %}" class="btn btn-primary me-2">Iniciar sesión de nuevo</a>
+                <a href="{% url 'core:home' %}" class="btn btn-secondary">Ir a la Página Principal</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}

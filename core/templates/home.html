@@ -1,0 +1,152 @@
+{# Municipalidad/core/templates/home.html #}
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Municipalidad Reciclaje{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="mb-4 text-center">¡Bienvenidos al Sitio Oficial de la Municipalidad!</h1>
+        <p class="lead text-center">Aquí podrá encontrar información sobre gestión de reciclaje y servicios municipales.</p>
+<!--  -->
+        {# --- MATERIALES ACEPTADOS Y PUNTOS LIMPIOS --- #}
+        <div class="row mt-5">
+            {# Tarjeta Materiales Aceptados #}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="card-title mb-0">Materiales Aceptados</h3>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% if materiales %}
+                            {% for material in materiales %}
+                                <li class="list-group-item">
+                                    <strong>{{ material.nombre }} ({{ material.codigo }}):</strong> {{ material.descripcion }}
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="list-group-item text-muted">No hay materiales disponibles en este momento.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+<!--  -->
+            {# Tarjeta Puntos Limpios #}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="card-title mb-0">Puntos Limpios</h3>
+                    </div>
+                    <div class="card-body">
+                        {# Las tarjetas de puntos limpios dentro de esta tarjeta #}
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card mb-3 bg-light">
+                                    <div class="card-body p-2">
+                                        <h6 class="card-title mb-1">Punto Limpio 1: Plaza de Viña</h6>
+                                        <small class="card-text text-muted">Ubicado en el corazón de Viña del Mar, acepta papel, cartón, vidrio y plásticos.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card mb-3 bg-light">
+                                    <div class="card-body p-2">
+                                        <h6 class="card-title mb-1">Punto Limpio 2: Reñaca Alto</h6>
+                                        <small class="card-text text-muted">Este punto limpio en Reñaca Alto recibe metales, envases y algunos tipos de electrónicos pequeños.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card mb-0 bg-light">
+                                    <div class="card-body p-2">
+                                        <h6 class="card-title mb-1">Punto Limpio 3: Miraflores</h6>
+                                        <small class="card-text text-muted">En Miraflores, este punto limpio se especializa en el reciclaje de botellas de vidrio y latas.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--  -->
+        {# --- FILA PARA RECOMENDACIONES --- #}
+        <div class="row mt-5">
+            <div class="col-12 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="card-title mb-0">Recomendaciones para el Reciclaje</h3>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Limpia y seca los envases antes de reciclarlos.</li>
+                        <li class="list-group-item">Separa los materiales por tipo (papel, plástico, vidrio, etc.).</li>
+                        <li class="list-group-item">Comprime el cartón y las botellas para ahorrar espacio.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+<!--  -->
+        {# --- INICIO DE MÉTRICAS --- #}
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2 class="mb-4 text-center">Métricas del Servicio de Reciclaje</h2>
+                <div class="row justify-content-center">
+<!--  -->
+                    {# Tarjeta de Solicitudes por Mes #}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-success text-white">
+                                Solicitudes por Mes
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                {% if solicitudes_por_mes %}
+                                    {% for item in solicitudes_por_mes %}
+                                        <li class="list-group-item">{{ item.mes }}: <strong>{{ item.cantidad }}</strong> solicitudes</li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li class="list-group-item">No hay datos de solicitudes por mes aún.</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+<!--  -->
+                    {# Tarjeta Materiales Más Reciclados #}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-success text-white">
+                                Top Materiales Más Reciclados
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                {% if materiales_mas_reciclados %}
+                                    {% for item in materiales_mas_reciclados %}
+                                        <li class="list-group-item"><strong>{{ item.material__nombre }}:</strong> {{ item.total_cantidad|floatformat:2 }} kg</li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li class="list-group-item">No hay datos de materiales reciclados aún.</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<!--  -->
+    {# --- (FOOTER) --- #}
+    <div class="container-fluid bg-dark text-white text-center py-4 mt-5"> 
+        <footer class="">
+            <div class="container"> 
+                <p>&copy; 2025 Municipalidad de Viña del Mar.</p>
+                <p>Contacto: info@municipalidadreciclaje.cl | Teléfono: +56 32 1234567</p>
+                <div>
+                    <a href="#" class="text-white mx-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white mx-2"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+{% endblock %}

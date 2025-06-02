@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Listado de Solicitudes de Retiro{% endblock %}
+
+{% block content %}
+    <div class="container mt-4"> 
+        <h1 class="mb-4">Listado de Solicitudes de Retiro</h1>
+
+        <div class="mt-4">
+            <a href="{% url 'solicitudes:crear_solicitud' %}" class="btn btn-primary mb-3">Crear Nueva Solicitud</a>
+        </div>
+
+        {% if solicitudes %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Material</th>
+                            <th>Cantidad</th>
+                            <th>Fecha Estimada</th>
+                            <th>Estado</th>
+                            <th>Fecha Creación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for solicitud in solicitudes %}
+                            <tr>
+                                <td>{{ solicitud.id }}</td>
+                                <td>{{ solicitud.usuario.username }}</td>
+                                <td>{{ solicitud.material.nombre }}</td>
+                                <td>{{ solicitud.cantidad_estimada }} kg</td>
+                                <td>{{ solicitud.fecha_retiro_estimada|date:"d M Y" }}</td>
+                                <td>{{ solicitud.estado }}</td>
+                                <td>{{ solicitud.fecha_solicitud|date:"d M Y H:i" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                No hay solicitudes de retiro registradas aún.
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

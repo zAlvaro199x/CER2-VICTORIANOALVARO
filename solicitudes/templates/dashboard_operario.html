@@ -1,0 +1,79 @@
+{% extends 'base.html' %} 
+{% load static %}
+
+{% block title %}Dashboard de Operario{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Panel de Operario - Solicitudes Asignadas</h1>
+
+        {% if messages %}
+            <div class="alert alert alert-info" role="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if solicitudes_asignadas %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario Ciudadano</th>
+                            <th>Material</th>
+                            <th>Cantidad</th>
+                            <th>Fecha Estimada Retiro</th>
+                            <th>Dirección</th>
+                            <th>Estado</th>
+                            <th>Comentarios Operario</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for solicitud in solicitudes_asignadas %}
+                            <tr>
+                                <td>{{ solicitud.id }}</td>
+                                <td>{{ solicitud.usuario.username }}</td>
+                                <td>{{ solicitud.material.nombre }}</td>
+                                <td>{{ solicitud.cantidad_estimada }} kg</td>
+                                <td>{{ solicitud.fecha_retiro_estimada|date:"d M Y" }}</td> {# Usamos fecha_retiro_estimada #}
+                                <td>{{ solicitud.direccion }}</td>
+                                <td>
+                                    {# ACTUALIZAR ESTADO Y COMENTARIOS #}
+                                    <form method="post" action="/solicitudes/dashboard_operario/">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="solicitud_id" value="{{ solicitud.id }}">
+                                        <select name="estado_nuevo" class="form-control mb-2">
+                                            {% for choice_value, choice_label in ESTADOS_SOLICITUD %} 
+                                                <option value="{{ choice_value }}" {% if solicitud.estado == choice_value %} selected {% endif %}>
+                                                    {{ choice_label }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                </td>
+                                <td>
+                                    <textarea name="comentarios_operario" class="form-control" rows="3" placeholder="Añadir o actualizar comentarios">{{ solicitud.comentarios_operario|default_if_none:"" }}</textarea>
+                                </td>
+                                <td>
+                                        <button type="submit" class="btn btn-primary btn-sm">Actualizar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                No tienes solicitudes asignadas en este momento.
+            </div>
+        {% endif %}
+
+        <div class="mt-4">
+            <a href="{% url 'admin:index' %}" class="btn btn-secondary">Panel de Admin</a>
+            <a href="{% url 'core:home' %}" class="btn btn-info">Inicio</a>
+        </div>
+    </div>
+{% endblock %}
